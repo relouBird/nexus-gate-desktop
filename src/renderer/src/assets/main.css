@@ -1,0 +1,548 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter/wght.css";
+@import "@fontsource-variable/jetbrains-mono/wght.css";
+
+
+@plugin "@tailwindcss/forms";
+
+@theme {
+  --font-sans: "Inter Variable", sans-serif;
+  --font-mono: "JetBrains Mono Variable", monospace;
+
+  /* ======== Primary — Blue #2563EB ========= */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #2563eb;
+  --color-primary-600: #1d4ed8;
+  --color-primary-700: #1e40af;
+  --color-primary-800: #1e3a8a;
+  --color-primary-900: #1e3264;
+  --color-primary-950: #0f1d42;
+
+  /* ======== Secondary — Violet #8B5CF6 ========= */
+  --color-secondary-50: #f5f3ff;
+  --color-secondary-100: #ede9fe;
+  --color-secondary-200: #ddd6fe;
+  --color-secondary-300: #c4b5fd;
+  --color-secondary-400: #a78bfa;
+  --color-secondary-500: #8b5cf6;
+  --color-secondary-600: #7c3aed;
+  --color-secondary-700: #6d28d9;
+  --color-secondary-800: #5b21b6;
+  --color-secondary-900: #4c1d95;
+  --color-secondary-950: #2e1065;
+
+  /* ======== Accent — Cyan #06B6D4 ========= */
+  --color-accent-50: #ecfeff;
+  --color-accent-100: #cffafe;
+  --color-accent-200: #a5f3fc;
+  --color-accent-300: #67e8f9;
+  --color-accent-400: #22d3ee;
+  --color-accent-500: #06b6d4;
+  --color-accent-600: #0891b2;
+  --color-accent-700: #0e7490;
+  --color-accent-800: #155e75;
+  --color-accent-900: #164e63;
+  --color-accent-950: #0a2f3d;
+
+  /* ======== Fuchsia — #D946EF ========= */
+  --color-fuchsia-50: #fdf4ff;
+  --color-fuchsia-100: #fae8ff;
+  --color-fuchsia-200: #f5d0fe;
+  --color-fuchsia-300: #f0abfc;
+  --color-fuchsia-400: #e879f9;
+  --color-fuchsia-500: #d946ef;
+  --color-fuchsia-600: #c026d3;
+  --color-fuchsia-700: #a21caf;
+  --color-fuchsia-800: #86198f;
+  --color-fuchsia-900: #701a75;
+  --color-fuchsia-950: #3d0a43;
+
+  /* ======== Neutral (base du branding #0B0F19 / #111827) ========= */
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+  --color-neutral-950: #020617;
+
+  /* ======== Text Color ========= */
+  --color-title-50: #0f172a;
+  --color-text-color: #1e293b;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94a3b8;
+
+  /* ======== White ========= */
+  --color-white-100: #ffffff;
+  --color-white-90: #ffffffcc;
+  --color-white-80: #ffffffcc;
+  --color-white-70: #ffffffb3;
+  --color-white-60: #ffffff99;
+
+  /* ======== Border Color ========= */
+  --border-color-base-50: #f8fafc;
+  --border-color-base-100: #f1f5f9;
+  --border-color-base-200: #e2e8f0;
+  --border-color-base-300: #cbd5e1;
+
+  /* ======== Foreground Color ========= */
+  --color-foreground-50: #020617;
+  --color-foreground-100: #0f172a;
+  --color-foreground-soft-50: #0f172a;
+  --color-foreground-soft-100: #0f172a;
+  --color-foreground-soft-200: #1e293b;
+  --color-foreground-soft-300: #020617;
+  --color-foreground-soft-400: #1e293b;
+  --color-foreground-soft-500: #334155;
+
+  /* ======== Background Color ========= */
+  --color-background-50: #ffffff;
+  --color-background-100: #ffffff;
+  --color-background-soft-50: #f8fafc;
+  --color-background-soft-100: #f1f5f9;
+  --color-background-soft-200: #f1f5f9;
+  --color-background-soft-300: #e2e8f0;
+  --color-background-soft-400: #cbd5e1;
+  --color-background-soft-500: #94a3b8;
+  --color-background-success-600: #16a34a;
+
+  /* ======== Button — Primary (Blue) ========= */
+  --color-button-primary-background: #2563eb;
+  --color-button-primary-hover-background: #1d4ed8;
+  --color-button-primary-text: #ffffff;
+  --color-button-primary-focus-ring: rgba(37, 99, 235, 0.2);
+
+  /* Outline */
+  --color-button-outline-background: #ffffff;
+  --color-button-outline-hover-background: #f8fafc;
+  --color-button-outline-border: #e2e8f0;
+  --color-button-outline-focus-ring: rgba(37, 99, 235, 0.12);
+  --color-button-outline-text: #1e293b;
+  --color-button-outline-hover-text: #0f172a;
+  --color-button-outline-disabled-background: #f1f5f9;
+  --color-button-outline-disabled-text: #94a3b8;
+
+  /* Disable */
+  --color-button-disabled-background: #f1f5f9;
+  --color-button-disabled-border: #f1f5f9;
+  --color-button-disabled-text: #94a3b8;
+
+  /* Error */
+  --color-button-error-background: #dc2626;
+  --color-button-error-hover-background: #b91c1c;
+  --color-button-error-border: #ef4444;
+  --color-button-error-text: #ffffff;
+  --color-button-error-focus-ring: rgba(220, 38, 38, 0.2);
+
+  /* Error Outline */
+  --color-button-error-outline-background: #fef2f2;
+  --color-button-error-outline-hover-background: #fecaca;
+  --color-button-error-outline-border: #ef4444;
+  --color-button-error-outline-focus-border: #dc2626;
+  --color-button-error-outline-focus-ring: rgba(220, 38, 38, 0.2);
+  --color-button-error-outline-text: #b91c1c;
+  --color-button-error-outline-hover-text: #b91c1c;
+
+  /* Success */
+  --color-button-success-background: #16a34a;
+  --color-button-success-hover-background: #15803d;
+  --color-button-success-border: #22c55e;
+  --color-button-success-text: #ffffff;
+  --color-button-success-focus-ring: rgba(22, 163, 74, 0.2);
+
+  /* Success Outline */
+  --color-button-success-outline-background: #f0fdf4;
+  --color-button-success-outline-hover-background: #bbf7d0;
+  --color-button-success-outline-border: #22c55e;
+  --color-button-success-outline-focus-border: #16a34a;
+  --color-button-success-outline-text: #15803d;
+  --color-button-success-outline-hover-text: #15803d;
+  --color-button-success-outline-focus-ring: rgba(22, 163, 74, 0.2);
+
+  /* Ghost */
+  --color-button-ghost-text: #94a3b8;
+  --color-button-ghost-hover-text: #64748b;
+  --color-button-ghost-hover-background: #f1f5f9;
+
+  /* Button Group Primary */
+  --color-button-group-primary-background: #ffffff;
+  --color-button-group-primary-hover-background: #2563eb;
+  --color-button-group-primary-text: #2563eb;
+  --color-button-group-primary-hover-text: #ffffff;
+
+  /* Button Group Secondary */
+  --color-button-group-secondary-background: #ffffff;
+  --color-button-group-secondary-text: #1e293b;
+
+  /* ======== Badge Color ========= */
+
+  /* Badge Neutral */
+  --color-badge-neutral-background: #f1f5f9;
+  --color-badge-neutral-text: #1e293b;
+  --color-badge-neutral-icon-color: #64748b;
+
+  /* Badge Primary (Blue) */
+  --color-badge-primary-background: #dbeafe;
+  --color-badge-primary-text: #1d4ed8;
+  --color-badge-primary-icon-color: #2563eb;
+
+  /* Badge Error */
+  --color-badge-error-background: #fef2f2;
+  --color-badge-error-text: #b91c1c;
+  --color-badge-error-icon-color: #ef4444;
+
+  /* Badge Warning */
+  --color-badge-warning-background: #fffbeb;
+  --color-badge-warning-text: #b45309;
+  --color-badge-warning-icon-color: #f59e0b;
+
+  /* Badge Success */
+  --color-badge-success-background: #f0fdf4;
+  --color-badge-success-text: #15803d;
+  --color-badge-success-icon-color: #22c55e;
+
+  /* Badge Cyan */
+  --color-badge-cyan-background: #ecfeff;
+  --color-badge-cyan-text: #0e7490;
+  --color-badge-cyan-icon-color: #06b6d4;
+
+  /* Badge Sky */
+  --color-badge-sky-background: #f0f9ff;
+  --color-badge-sky-text: #0369a1;
+  --color-badge-sky-icon-color: #0ea5e9;
+
+  /* Badge Blue */
+  --color-badge-blue-background: #dbeafe;
+  --color-badge-blue-text: #1d4ed8;
+  --color-badge-blue-icon-color: #2563eb;
+
+  /* Badge Violet */
+  --color-badge-violet-background: #ede9fe;
+  --color-badge-violet-text: #6d28d9;
+  --color-badge-violet-icon-color: #8b5cf6;
+
+  /* Badge Purple */
+  --color-badge-purple-background: #f5f3ff;
+  --color-badge-purple-text: #6d28d9;
+  --color-badge-purple-icon-color: #8b5cf6;
+
+  /* Badge Pink */
+  --color-badge-pink-background: #fdf4ff;
+  --color-badge-pink-text: #a21caf;
+  --color-badge-pink-icon-color: #d946ef;
+
+  /* Badge Rose */
+  --color-badge-rose-background: #fff1f2;
+  --color-badge-rose-text: #be123c;
+  --color-badge-rose-icon-color: #f43f5e;
+
+  /* Badge Orange */
+  --color-badge-orange-background: #fff7ed;
+  --color-badge-orange-text: #c2410c;
+  --color-badge-orange-icon-color: #f97316;
+
+  /* ======== Chart ========= */
+  --color-chart-tick: #94a3b8;
+  --color-chart-legend: #94a3b8;
+  --color-chart-grid: #f1f5f9;
+
+  /* ======== Sidebar ========= */
+  --color-sidebar-nav-default-background: #ffffff;
+  --color-sidebar-nav-hover-background: #f8fafc;
+  --color-sidebar-nav-secondary-hover-background: #f1f5f9;
+  --color-sidebar-nav-hover-text: #1e293b;
+  --color-sidebar-nav-active-text: #2563eb;
+  --color-sidebar-nav-active-background: #dbeafe;
+  --color-sidebar-nav-focused-background: #dbeafe;
+  --color-sidebar-nav-default-text: #475569;
+  --color-sidebar-nav-icon: #94a3b8;
+
+  /* Sidebar Badge */
+  --color-sidebar-badge-background: #2563eb;
+  --color-sidebar-badge-text: #ffffff;
+
+  /* Sidebar Footer */
+  --color-sidebar-footer-background: #f8fafc;
+  --color-sidebar-footer-title: #0f172a;
+  --color-sidebar-footer-subtitle: #64748b;
+  --color-sidebar-footer-button-text: #ffffff;
+
+  /* ======== Card Color ========= */
+  --color-card-background-50: #ffffff;
+  --color-card-background-100: #ffffff;
+  --color-card-background-200: #f1f5f9;
+  --color-card-background-300: #f8fafc;
+
+  /* ======== Alert Success Color ========= */
+  --color-alert-success-background: #f0fdf4;
+  --color-alert-success-icon-background: #16a34a;
+  --color-alert-success-border: #bbf7d0;
+  --color-alert-success-close-icon: #16a34a;
+  --color-alert-success-title: #166534;
+  --color-alert-success-description: #15803d;
+  --color-alert-success-button-background: #16a34a;
+  --color-alert-success-button-hover-background: #15803d;
+  --color-alert-success-button-text: #15803d;
+
+  /* ======== Alert Danger Color ========= */
+  --color-alert-danger-background: #fef2f2;
+  --color-alert-danger-icon-background: #dc2626;
+  --color-alert-danger-border: #fecaca;
+  --color-alert-danger-close-icon: #b91c1c;
+  --color-alert-danger-title: #991b1b;
+  --color-alert-danger-description: #b91c1c;
+  --color-alert-danger-button-background: #dc2626;
+  --color-alert-danger-button-hover-background: #b91c1c;
+  --color-alert-danger-button-text: #b91c1c;
+
+  /* ======== Alert Info Color (Cyan) ========= */
+  --color-alert-info-background: #ecfeff;
+  --color-alert-info-icon-background: #06b6d4;
+  --color-alert-info-border: #a5f3fc;
+  --color-alert-info-close-icon: #0891b2;
+  --color-alert-info-title: #155e75;
+  --color-alert-info-description: #0e7490;
+  --color-alert-info-button-background: #0891b2;
+  --color-alert-info-button-hover-background: #0e7490;
+  --color-alert-info-button-text: #0e7490;
+
+  /* ======== Alert Warning Color ========= */
+  --color-alert-warning-background: #fffbeb;
+  --color-alert-warning-icon-background: #f59e0b;
+  --color-alert-warning-border: #fde68a;
+  --color-alert-warning-close-icon: #b45309;
+  --color-alert-warning-title: #78350f;
+  --color-alert-warning-description: #92400e;
+  --color-alert-warning-button-background: #b45309;
+  --color-alert-warning-button-hover-background: #92400e;
+  --color-alert-warning-button-text: #92400e;
+
+  /* ======== Alert Default Color ========= */
+  --color-alert-default-background: #f8fafc;
+  --color-alert-default-icon-background: #64748b;
+  --color-alert-default-border: #e2e8f0;
+  --color-alert-default-close-icon: #475569;
+  --color-alert-default-title: #0f172a;
+  --color-alert-default-description: #1e293b;
+  --color-alert-default-button-background: #475569;
+  --color-alert-default-button-hover-background: #334155;
+  --color-alert-default-button-text: #334155;
+
+  /* ======== Input Color ========= */
+  --color-input-background: #ffffff;
+  --color-input-label-text: #1e293b;
+  --color-input-disabled-text: #cbd5e1;
+  --color-input-placeholder-text: #94a3b8;
+  --color-input-primary-focus-border: #93c5fd;
+  --color-input-error-focus-border: #ef4444;
+  --color-input-success-focus-border: #22c55e;
+  --color-input-error: #ef4444;
+  --color-input-success: #22c55e;
+
+  /* ======== Tab Color ========= */
+  --color-tab-background: #f1f5f9;
+  --color-tab-active-background: #ffffff;
+  --color-tab-secondary-active-background: #dbeafe;
+
+  /* ======== Checkbox Color ========= */
+  --color-checkbox-background: #ffffff;
+  --color-checkbox-checked-border: #2563eb;
+  --color-checkbox-checked-background: #2563eb;
+  --color-checkbox-checked-icon-color: #ffffff;
+
+  /* ======== Scrollbar Color ========= */
+  --color-scrollbar-background: #e2e8f0;
+
+  /* ======== Datepicker Color ========= */
+  --color-datepicker-background: #ffffff;
+  --color-datepicker-selected-background: #f8fafc;
+
+  /* ======== Dropdowns Color ========= */
+  --color-dropdown-background: #ffffff;
+  --color-dropdown-hover-background: #f8fafc;
+  --color-dropdown-secondary-background: #ffffff;
+  --color-dropdown-divider: #f1f5f9;
+
+  /* ======== Calendar Color ========= */
+  --color-calendar-primary-badge: #2563eb;
+  --color-calendar-primary-background: #dbeafe;
+  --color-calendar-success-badge: #22c55e;
+  --color-calendar-success-background: #f0fdf4;
+  --color-calendar-warning-badge: #f97316;
+  --color-calendar-warning-background: #fff7ed;
+  --color-calendar-danger-badge: #ef4444;
+  --color-calendar-danger-background: #fef2f2;
+  --color-calendar-info-badge: #06b6d4;
+  --color-calendar-info-background: #ecfeff;
+  --color-calendar-text: #1e293b;
+  --color-calendar-menu-text: #94a3b8;
+  --color-calendar-dropdown-background: #ffffff;
+
+  /* ======== Pricing Table Color ========= */
+  --color-pricing-active-switcher-background: #ffffff;
+  --color-pricing-active-card-background: #0f172a;
+  --color-pricing-button-background: #0f172a;
+  --color-pricing-icon-color: #2563eb;
+  --color-pricing-icon-background: #dbeafe;
+
+  /* ======== FAQ's Color ========= */
+  --color-faq-primary-active-background: #f8fafc;
+  --color-faq-secondary-active-background: #dbeafe;
+  --color-faq-secondary-active-border: #bfdbfe;
+  --color-faq-secondary-active-title: #0f172a;
+  --color-faq-secondary-active-text: #1e293b;
+
+  /* ======== Chat List Color ========= */
+  --color-chat-list-background-primary: #334155;
+  --color-chat-list-background-primary-alt: #f1f5f9;
+  --color-chat-list-background-secondary: #2563eb;
+  --color-chat-list-background-secondary-alt: #dbeafe;
+
+  /* ======== Tooltip Color ========= */
+  --color-tooltip-text: #1e293b;
+
+  /* ======== Popovers Color ========= */
+  --color-popover-title-background: #f1f5f9;
+  --color-popover-border: #e2e8f0;
+
+  /* ======== Skeleton Color ========= */
+  --color-skeleton-gradient-50: #e2e8f0;
+  --color-skeleton-gradient-100: #f8fafc;
+  --color-skeleton-gradient-200: #e2e8f0;
+
+  /* ======== 404 Page Color ========= */
+  --color-404-background: #ffffff66;
+  --color-404-foreground: #e2e8f0;
+
+  /* ======== Blogs Color ========= */
+  --color-blog-shape: #e2e8f0;
+
+  /* ======== Modal Color ========= */
+  --color-modal-button-success-background: #16a34a;
+  --color-modal-button-info-background: #0891b2;
+  --color-modal-button-warning-background: #b45309;
+  --color-modal-button-error-background: #dc2626;
+
+  /* ======== Section Title Color ========= */
+  --color-section-title-badge: #2563eb;
+  --color-section-title-badge-background: #2563eb0d;
+
+  /* ======== Mobile Nav ========= */
+  --color-mobile-nav-icon: #1e293b;
+  --color-mobile-nav-background: #ffffff;
+  --color-mobile-nav-hover-background: #f8fafc;
+
+  /* ======== Footer Color ========= */
+  --color-footer-card-background: #f8fafc;
+  --color-footer-background: #ffffff;
+
+  /* ======== Bento Color ========= */
+  --color-bento-card-background: #f1f5f9;
+  --color-bento-gradient-shade-1: #ffffff00;
+  --color-bento-gradient-shade-2: #ffffff80;
+  --color-bento-gradient-shade-3: #ffffff;
+
+  /* ======== CTA Color ========= */
+  --color-cta-icon-background: #ffffff;
+  --color-cta-background: #ffffff;
+
+  /* ======== Hero Color ========= */
+  --color-hero-background: #f1f5f9;
+  --color-hero-card-background: #ffffff;
+  --color-hero-card-2-background: #f1f5f9;
+  --color-hero-gradient-shade-1: #ffffff99;
+  --color-hero-gradient-shade-2: #ffffff;
+
+  /* ======== Toggle Color ========= */
+  --color-toggle-default-background: #e2e8f0;
+  --color-toggle-disabled-foreground: #ffffff;
+  --color-toggle-disabled-background: #f1f5f9;
+  --color-toggle-active-background: #2563eb;
+
+  /* ======== Map Color ========= */
+  --color-map-fill: #cbd5e1;
+
+  /* ======== AI Sidebar Gradient ========= */
+  --color-ai-sidebar-primary-gradient-shade-1: #ffffff;
+  --color-ai-sidebar-primary-gradient-shade-2: #ffffff00;
+  --color-ai-sidebar-secondary-gradient-shade-1: #f8fafc;
+  --color-ai-sidebar-secondary-gradient-shade-2: #f8fafc00;
+
+  /* ======== AI Sidebar Menu ========= */
+  --color-ai-sidebar-hover-primary-shade-1: #f1f5f9;
+  --color-ai-sidebar-hover-primary-shade-2: #f1f5f900;
+  --color-ai-sidebar-hover-secondary-shade-1: #e2e8f0;
+  --color-ai-sidebar-hover-secondary-shade-2: #e2e8f000;
+  --color-ai-sidebar-hover-primary-background: #f1f5f9;
+  --color-ai-sidebar-hover-secondary-background: #e2e8f0;
+  --color-ai-title-gradient-shade-1: #0f172a;
+  --color-ai-title-gradient-shade-2: #94a3b8;
+  --color-ai-hero-blend-1: #f1f5f9;
+  --color-ai-hero-blend-2: #f1f5f900;
+
+  /* ======== Shadows ========= */
+  --shadow-xs: 0px 1px 2px 0px rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0px 1px 3px 0px rgba(15, 23, 42, 0.1);
+  --shadow-md:
+    0px 4px 8px -2px rgba(15, 23, 42, 0.1),
+    0px 2px 4px -2px rgba(15, 23, 42, 0.06);
+  --shadow-lg:
+    0px 12px 16px -4px rgba(15, 23, 42, 0.08),
+    0px 4px 6px -2px rgba(15, 23, 42, 0.03);
+  --shadow-xl: 0px 1px 2px 0px rgba(15, 23, 42, 0.05);
+  --shadow-2xl: 0px 1px 2px 0px rgba(15, 23, 42, 0.05);
+  --shadow-3xl: 0px 1px 2px 0px rgba(15, 23, 42, 0.05);
+  --drop-shadow-theme-3xl: 0 32px 64px rgba(15, 23, 42, 0.14);
+  --popover-shadow: 0px 5px 5px -2px rgba(15, 23, 42, 0.04);
+  --shadow-hero: 0px -14px 100px 0px rgba(15, 23, 42, 0.05);
+
+  --animate-pulse-custom: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  /* ======== Semantic Status Colors ========= */
+  --color-success-50: #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-500: #22c55e;
+  --color-success-500: #16a34a;
+  --color-success-600: #15803d;
+
+  --color-error-50: #fef2f2;
+  --color-error-100: #fecaca;
+  --color-error-400: #f87171;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fde68a;
+  --color-warning-400: #fbbf24;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+
+  --color-info-50: #ecfeff;
+  --color-info-100: #cffafe;
+  --color-info-400: #22d3ee;
+  --color-info-500: #06b6d4;
+  --color-info-600: #0891b2;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.7; }
+}

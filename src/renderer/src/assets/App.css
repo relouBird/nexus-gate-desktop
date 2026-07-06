@@ -1,0 +1,43 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+.toast-bottom {
+  position: fixed !important;
+  bottom: 5em;
+  right: 2em;
+  z-index: 1000;
+}
+.animate-notif {
+  animation: come 400ms linear;
+}
+
+@keyframes come {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounce-smooth {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-9px);
+    opacity: 1;
+  }
+}
+
+.animate-bounce-smooth {
+  animation: bounce-smooth 0.8s infinite ease-in-out;
+}
