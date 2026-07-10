@@ -28,6 +28,7 @@ import ForgotPasswordPage from './routes/auth/ForgotPasswordPage'
 import DetailsServerPage from './routes/network/DetailsServerPage'
 import TeamSettingsPage from './routes/team/TeamSettings'
 import LogsPage from './routes/network/LogsPage'
+import BlockedPage from './routes/BlockedPage'
 
 function App(): React.JSX.Element {
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
@@ -53,6 +54,7 @@ function App(): React.JSX.Element {
     <>
       <BrowserRouter>
         <Routes>
+          <Route path="blocked" element={<BlockedPage />} />
           <Route element={<LayoutDefault />}>
             <Route index element={<DashboardPage />} />
             <Route path="network">

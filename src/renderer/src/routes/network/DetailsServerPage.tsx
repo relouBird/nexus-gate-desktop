@@ -22,6 +22,7 @@ import GrantUsersModal from '@/components/network/GrantUsersModal'
 import TokenAuthConfirmModal from '@/components/network/TokenAuthConfirmModal'
 import ServerFastAction from '@/components/network/ServerFastAction'
 import HeadersEditor from '@/components/network/HeadersEditor'
+import { useAuthStore } from '@/stores/auth.store'
 
 // ─── MAIN PAGE ─────────────────────────────────────────────────
 
@@ -32,18 +33,22 @@ export default function DetailsServerPage(): React.JSX.Element {
   const navigate = useNavigate()
 
   // Stores
+  const { accessToken } = useStore(useAuthStore)
   const { users, getManyUser } = useStore(useUserStore)
   const {
     server,
-    getServer,
     updateServer,
     revokeServer,
     deleteServer,
     tokenAuthServer,
+    toggleTunnelServer,
     setServerHeader,
     grantServer
   } = useStore(useServerStore)
   const { rules, getManyRule, createRule, updateRule, deleteRule } = useStore(useRuleStore)
+
+  // Methode de la store
+  const getServer = useStore(useServerStore, (state) => state.getServer)
 
   // Les differents loading
   const [isLoading, setIsLoading] = useState(false)
@@ -170,6 +175,24 @@ export default function DetailsServerPage(): React.JSX.Element {
     await tokenAuthServer({ id: server?.id ?? '', requireToken: newValue }, notify)
   }
 
+  // ─── Gérer l'état actif du Tunnel ──────────────────────────
+  async function handleToggleTunnelActive(newValue: boolean): Promise<void> {
+    try {
+      await pause(500)
+      await toggleTunnelServer({ id: server?.id ?? '', isActive: newValue }, notify)
+      if (newValue) {
+        window.electron.ipcRenderer.send('tunnel:start', {
+          token: accessToken ?? null,
+          serverId: server?.id ?? ''
+        })
+      } else {
+        window.electron.ipcRenderer.send('tunnel:stop', server?.id ?? '')
+      }
+    } catch (error) {
+      console.log('ERROR ====>', error)
+    }
+  }
+
   // ─── Gérer Headers Server ───────────────────────────────────
   async function handleServerHeader(): Promise<void> {
     await pause(500)
@@ -215,7 +238,7 @@ export default function DetailsServerPage(): React.JSX.Element {
             <div className="grid grid-cols-1 lg:grid-cols-9 gap-6 -mt-3">
               {/* Infos server */}
               <section className="lg:col-span-4">
-                <ServerInfoCard server={server} />
+                <ServerInfoCard server={server} handleLaunch={handleToggleTunnelActive} />
               </section>
 
               {/* Règles */}

@@ -3,39 +3,35 @@
 //   CreateServerDto → POST /config/servers  { name, url?, type? }
 //   UpdateServerDto → PATCH /config/servers/:id  { name?, url?, type? }
 
-import { useState, type FormEvent } from "react";
-import { cn } from "@/utils/cn";
-import {
-  ServerTypes,
-  type Server,
-  type ServerType,
-} from "@/types/nexusgate.type";
-import { pause } from "@/constants";
-import ServerIcon from "../icons/ServerIcon";
-import { Spinner } from "../ui/Spinner";
-import ModalHeader from "../gen/ModalHeader";
-import { UserPencil } from "@tailgrids/icons";
-import { FieldGroup } from "../account/UtilsParam";
-import { AuthInput } from "../auth/AuthFormparts";
+import { useEffect, useState, type FormEvent } from 'react'
+import { cn } from '@/utils/cn'
+import { ServerTypes, type Server, type ServerType } from '@/types/nexusgate.type'
+import { pause } from '@/constants'
+import ServerIcon from '../icons/ServerIcon'
+import { Spinner } from '../ui/Spinner'
+import ModalHeader from '../gen/ModalHeader'
+import { UserPencil } from '@tailgrids/icons'
+import { FieldGroup } from '../account/UtilsParam'
+import { AuthInput } from '../auth/AuthFormparts'
 
 // Formulaires
-import useForm from "@/composables/useForm";
-import * as yup from "yup";
+import useForm from '@/composables/useForm'
+import * as yup from 'yup'
 
 // ─── Types locaux ────────────────────────────────────────────
 
 export interface ServerProcessData {
-  name: string;
-  url: string;
-  type: ServerType;
+  name: string
+  url: string
+  type: ServerType
 }
 
 interface ServerProcessModalProps {
   /** Absent → mode création, présent → mode mise à jour */
-  server?: Server;
-  onClose: () => void;
-  onProcess: (server: ServerProcessData) => Promise<void>;
-  disabled?: boolean;
+  server?: Server
+  onClose: () => void
+  onProcess: (server: ServerProcessData) => Promise<void>
+  disabled?: boolean
 }
 
 // ─── Modal ────────────────────────────────────────────────────
@@ -44,58 +40,67 @@ export default function ServerProcessModal({
   server,
   onClose,
   onProcess,
-  disabled = false,
-}: ServerProcessModalProps) {
-  const isEdit = !!server;
+  disabled = false
+}: ServerProcessModalProps): React.JSX.Element {
+  const isEdit = !!server
 
   // 🔹 Créer un formulaire réactif
   const formTemplate = useForm(
     // Schéma de validation Yup
     yup.object().shape({
-      name: yup
-        .string()
-        .trim()
-        .required("Le nom est requis.")
-        .min(2, "Minimum 2 caractères."),
+      name: yup.string().trim().required('Le nom est requis.').min(2, 'Minimum 2 caractères.'),
       type: yup.string().required(),
       url: yup
         .string()
         .trim()
-        .when("type", {
-          is: ServerTypes.CLOUD,
-          then: (schema) =>
-            schema.required("L'URL cible est requise pour un serveur Cloud."),
-          otherwise: (schema) => schema.notRequired(),
-        })
+        .required("L'URL cible est requise pour un serveur Cloud.")
         .test(
-          "is-valid-url",
+          'is-valid-url',
           "L'URL doit commencer par http:// ou https://",
-          (value) => !value || /^https?:\/\/.+/.test(value),
-        ),
+          (value) => !value || /^https?:\/\/.+/.test(value)
+        )
     }),
     // Valeurs initiales par défaut
     {
-      name: server?.name ?? "",
+      name: server?.name ?? '',
       type: server?.type ?? ServerTypes.CLOUD, // Ou "CLOUD" selon votre valeur par défaut
-      url: server?.url ?? "",
-    },
-  );
+      url: server?.url ?? ''
+    }
+  )
 
-  const [loading, setLoading] = useState(false);
+  // 🔹 Créer un formulaire réactif
+  const formHost = useForm(
+    // Schéma de validation Yup
+    yup.object().shape({
+      host: yup.string().trim().required('Le nom est requis.').min(2, 'Minimum 2 caractères.'),
+      port: yup
+        .string()
+        .required('Le port est requis')
+        .min(3, 'Minimum 3 chars')
+        .max(4, 'Maximum 4 chars')
+    }),
+    // Valeurs initiales par défaut
+    {
+      host: server?.url.split(':')[0] ?? '',
+      port: server?.url.split(':')[1] ?? ''
+    }
+  )
+
+  const [loading, setLoading] = useState(false)
 
   // ── Submit ──────────────────────────────────────────────────
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    const isValid = await formTemplate.validate();
+  async function handleSubmit(e: FormEvent): Promise<void> {
+    e.preventDefault()
+    const isValid = await formTemplate.validate()
 
     if (!isValid) {
-      return;
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
     try {
-      await pause(1500);
+      await pause(1500)
       // TODO création :  await serverService.create({ name, url, type })
       //      → POST /config/servers — retourne le Server complet avec identifier généré
       // TODO mise à jour : await serverService.update(server.id, { name, url, type })
@@ -104,33 +109,37 @@ export default function ServerProcessModal({
       // Mock : on simule le retour du backend
       const result = {
         name: formTemplate.data.name.trim(),
-        url: formTemplate.data.url?.trim() ?? "",
-        type: formTemplate.data.type as ServerType,
-      };
+        url: formTemplate.data.url?.trim() ?? '',
+        type: formTemplate.data.type as ServerType
+      }
 
-      await onProcess(result);
-      onClose();
+      await onProcess(result)
+      onClose()
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
   // ── Render ──────────────────────────────────────────────────
+  useEffect(() => {
+    formTemplate.setData('url', `http://${formHost.data.host}:${formHost.data.port}`)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formHost.data.host, formHost.data.port])
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm px-4"
       onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        if (e.target === e.currentTarget) onClose()
       }}
       role="dialog"
       aria-modal="true"
-      aria-label={isEdit ? "Modifier le serveur" : "Créer un serveur"}
+      aria-label={isEdit ? 'Modifier le serveur' : 'Créer un serveur'}
     >
       <div className="bg-background-50 rounded-2xl shadow-2xl w-full max-w-md flex flex-col overflow-hidden border border-base-200">
         {/* Header */}
         <ModalHeader
-          title={server ? `Modifier — ${server.name}` : "Créer un Serveur"}
+          title={server ? `Modifier — ${server.name}` : 'Créer un Serveur'}
           icon={server ? <UserPencil /> : <ServerIcon />}
           onClose={onClose}
         />
@@ -147,8 +156,8 @@ export default function ServerProcessModal({
             <AuthInput
               id="srv-name"
               value={formTemplate.data.name}
-              onChange={(v) => formTemplate.setData("name", v.target.value)}
-              onBlur={() => formTemplate.validateField("name")}
+              onChange={(v) => formTemplate.setData('name', v.target.value)}
+              onBlur={() => formTemplate.validateField('name')}
               placeholder="ex: API Production"
               hasError={!!formTemplate.errors.name}
               disabled={loading || disabled}
@@ -164,22 +173,21 @@ export default function ServerProcessModal({
                   type="button"
                   disabled={loading || disabled}
                   onClick={() => {
-                    formTemplate.setData("type", t);
+                    formTemplate.setData('type', t)
                     // Vide l'URL si on passe en LOCAL
-                    if (t === ServerTypes.LOCAL)
-                      formTemplate.setData("url", "");
+                    if (t === ServerTypes.LOCAL) formTemplate.setData('url', '')
                   }}
                   className={cn(
-                    "flex-1 py-2.5 rounded-xl border text-xs font-semibold transition-colors focus:outline-none focus:ring focus:ring-primary-300/40 focus:border-primary-400",
+                    'flex-1 py-2.5 rounded-xl border text-xs font-semibold transition-colors focus:outline-none focus:ring focus:ring-primary-300/40 focus:border-primary-400 ',
                     formTemplate.data.type === t
-                      ? t === "CLOUD"
-                        ? "border-blue-300 bg-blue-50 text-blue-700"
-                        : "border-orange-300 bg-orange-50 text-orange-700"
-                      : "border-base-200 bg-background-50 text-foreground-soft-500 hover:border-base-300 hover:text-title-50",
-                    (loading || disabled) && "opacity-50 cursor-not-allowed",
+                      ? t === 'CLOUD'
+                        ? 'border-blue-300 bg-blue-50 text-blue-700 focus:ring-primary-300/40 focus:border-primary-400'
+                        : 'border-orange-300 bg-orange-50 text-orange-700 focus:ring-orange-300/40 focus:border-orange-400'
+                      : 'border-base-200 bg-background-50 text-foreground-soft-500 hover:border-base-300 hover:text-title-50',
+                    (loading || disabled) && 'opacity-50 cursor-not-allowed'
                   )}
                 >
-                  {t === ServerTypes.CLOUD ? "☁ Cloud" : "⬡ Local"}
+                  {t === ServerTypes.CLOUD ? '☁ Cloud' : '⬡ Local'}
                 </button>
               ))}
             </div>
@@ -201,13 +209,52 @@ export default function ServerProcessModal({
               <AuthInput
                 id="srv-url"
                 value={formTemplate.data.url}
-                onChange={(v) => formTemplate.setData("url", v.target.value)}
-                onBlur={() => formTemplate.validateField("url")}
+                onChange={(v) => formTemplate.setData('url', v.target.value)}
+                onBlur={() => formTemplate.validateField('url')}
                 placeholder="https://api.techcorp.com"
                 hasError={!!formTemplate.errors.url}
                 disabled={loading || disabled}
               />
             </FieldGroup>
+          )}
+
+          {/*HOST + PORT seulement en mode LOCAL */}
+          {formTemplate.data.type === ServerTypes.LOCAL && (
+            <div className="flex justify-between gap-2">
+              <FieldGroup
+                label="HOST"
+                htmlFor="srv-host"
+                error={formHost.errors.host?.toLocaleString()}
+                hint="HOST — ex: 127.0.0.1"
+              >
+                <AuthInput
+                  id="srv-host"
+                  value={formHost.data.host}
+                  onChange={(v) => formHost.setData('host', v.target.value)}
+                  onBlur={() => formHost.validateField('host')}
+                  placeholder="127.0.0.1"
+                  hasError={!!formHost.errors.host}
+                  disabled={loading || disabled}
+                />
+              </FieldGroup>
+              <FieldGroup
+                label="PORT"
+                htmlFor="srv-port"
+                error={formHost.errors.port?.toLocaleString()}
+                hint="PORT — ex: 8080"
+              >
+                <AuthInput
+                  id="srv-port"
+                  type="number"
+                  value={formHost.data.port}
+                  onChange={(v) => formHost.setData('port', v.target.value)}
+                  onBlur={() => formHost.validateField('port')}
+                  placeholder="8800"
+                  hasError={!!formHost.errors.port}
+                  disabled={loading || disabled}
+                />
+              </FieldGroup>
+            </div>
           )}
 
           {/* Identifier (lecture seule en mode édition) */}
@@ -239,19 +286,19 @@ export default function ServerProcessModal({
                 disabled={loading}
                 className="flex-1 rounded-xl bg-primary-500 hover:bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors disabled:opacity-50 flex items-center justify-center gap-2 focus:outline-none"
               >
-                {loading && <Spinner size={"sm"} />}
+                {loading && <Spinner size={'sm'} />}
                 {loading
                   ? isEdit
-                    ? "Mise à jour..."
-                    : "Création..."
+                    ? 'Mise à jour...'
+                    : 'Création...'
                   : isEdit
-                    ? "Mettre à jour"
-                    : "Créer le serveur"}
+                    ? 'Mettre à jour'
+                    : 'Créer le serveur'}
               </button>
             </div>
           )}
         </form>
       </div>
     </div>
-  );
+  )
 }

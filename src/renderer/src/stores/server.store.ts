@@ -17,7 +17,9 @@ import type {
   RevokeServerPayload,
   GrantServerResponse,
   GrantServerPayload,
-  SetServerHeaderPayload
+  SetServerHeaderPayload,
+  ToggleTunnelServerPayload,
+  ToggleTunnelServerResponse
 } from '@/types/server.type'
 import type { NotifyFn } from '@/helpers/notifications.helper'
 import type { Server } from '@/types/nexusgate.type'
@@ -53,6 +55,11 @@ type ServerStoreActions = {
     payload: TokenAuthServerPayload,
     notify?: NotifyFn
   ) => Promise<AxiosResponse<TokenAuthServerResponse>>
+
+  toggleTunnelServer: (
+    payload: ToggleTunnelServerPayload,
+    notify?: NotifyFn
+  ) => Promise<AxiosResponse<ToggleTunnelServerResponse>>
 
   setServerHeader: (
     payload: SetServerHeaderPayload,
@@ -232,6 +239,40 @@ export const useServerStore = create<ServerStoreState & ServerStoreActions>()(
         try {
           const service = serverService()
           const response = await service.tokenAuthServer(payload)
+
+          if (response.status === 200 || response.status === 201) {
+            const updated = response.data?.server ?? null
+            if (updated)
+              set({
+                server: updated,
+                servers: get().servers.map((x) => (x.id === updated.id ? updated : x))
+              })
+          }
+
+          notify?.({
+            message:
+              response.data?.message ?? 'Authentification par token mise à jour avec succès.',
+            color: 'success',
+            visible: true
+          })
+
+          return response
+        } catch (error) {
+          const response = error as AxiosResponse
+          notify?.({
+            message:
+              response.data?.message ?? "Impossible de mettre à jour l'authentification par token.",
+            color: 'error',
+            visible: true
+          })
+          throw error
+        }
+      },
+
+      toggleTunnelServer: async (payload, notify) => {
+        try {
+          const service = serverService()
+          const response = await service.toggleTunnelServer(payload)
 
           if (response.status === 200 || response.status === 201) {
             const updated = response.data?.server ?? null
