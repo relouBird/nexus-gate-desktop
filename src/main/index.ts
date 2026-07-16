@@ -74,14 +74,14 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  const valid = mainWindow && !mainWindow.isDestroyed() && !mainWindow.webContents.isDestroyed()
-
   // Relai des events du manager vers le renderer
   tunnelManager.on('status', (serverId, status) => {
-    if (valid) mainWindow.webContents.send('tunnel:status', { serverId, status })
+    if (mainWindow && !mainWindow.isDestroyed() && !mainWindow.webContents.isDestroyed())
+      mainWindow.webContents.send('tunnel:status', { serverId, status })
   })
   tunnelManager.on('log', (serverId, line) => {
-    if (valid) mainWindow.webContents.send('tunnel:log', { serverId, line })
+    if (mainWindow && !mainWindow.isDestroyed() && !mainWindow.webContents.isDestroyed())
+      mainWindow.webContents.send('tunnel:log', { serverId, line })
   })
 
   // IPC test

@@ -16,6 +16,7 @@ extraResources:
     to: bin
 win:
   executableName: nexus-gate-desktop
+  icon: resources/icon.png
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
