@@ -1,92 +1,102 @@
 // types/server.type.ts
-import type { Server, ServerType } from "@/types/nexusgate.type";
+import type { Server, ServerType } from '@/types/nexusgate.type'
 
 // ─── Payloads ─────────────────────────────────────────────────
 
 export interface CreateServerPayload {
-  name: string;
-  url?: string;
-  type?: ServerType;
+  name: string
+  url?: string
+  type?: ServerType
 }
 
 export interface UpdateServerPayload {
-  id: string;
-  name?: string;
-  url?: string;
-  type?: ServerType;
+  id: string
+  name?: string
+  url?: string
+  type?: ServerType
 }
 
 export interface TokenAuthServerPayload {
-  id: string;
-  requireToken: boolean;
+  id: string
+  requireToken: boolean
+}
+
+export interface ToggleTunnelServerPayload {
+  id: string
+  isActive: boolean
 }
 
 export interface SetServerHeaderPayload {
-  id: string;
-  headers: Record<string, string>;
+  id: string
+  headers: Record<string, string>
 }
 
 export interface RevokeServerPayload {
-  id: string;
+  id: string
 }
 
 export interface GrantServerPayload {
-  id: string;
-  userIds: string[];
+  id: string
+  userIds: string[]
 }
 
 // ─── Responses ────────────────────────────────────────────────
 
 export interface CreateServerResponse {
-  server?: Server;
-  message?: string;
+  server?: Server
+  message?: string
 }
 
 export interface GetServersResponse {
-  servers?: Server[];
-  total?: number;
-  message?: string;
+  servers?: Server[]
+  total?: number
+  message?: string
 }
 
 export interface GetServerResponse {
-  server?: Server;
+  server?: Server
   users: {
-    id: string;
-    username: string;
-  }[];
-  message?: string;
+    id: string
+    username: string
+  }[]
+  message?: string
 }
 
 export interface UpdateServerResponse {
-  server?: Server;
-  message?: string;
+  server?: Server
+  message?: string
 }
 
 export interface DeleteServerResponse {
-  message?: string;
+  message?: string
 }
 
 export interface TokenAuthServerResponse {
-  server?: Server;
-  message?: string;
+  server?: Server
+  message?: string
+}
+
+export interface ToggleTunnelServerResponse {
+  server?: Server
+  message?: string
 }
 
 export interface SetHeaderServerResponse {
-  server?: Server;
-  message?: string;
+  server?: Server
+  message?: string
 }
 
 export interface RevokeServerResponse {
-  server?: Server;
-  users: [];
-  message?: string;
+  server?: Server
+  users: []
+  message?: string
 }
 
 export interface GrantServerResponse {
-  server?: Server;
+  server?: Server
   users: {
-    id: string;
-    username: string;
-  }[];
-  message?: string;
+    id: string
+    username: string
+  }[]
+  message?: string
 }

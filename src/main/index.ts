@@ -2,11 +2,17 @@ import { app, shell, BrowserWindow, ipcMain, session, screen, Menu } from 'elect
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { SocketCreatePayload } from './type'
+import { TunnelProcessManager } from './tunnelManager'
+
+let mainWindow: BrowserWindow
+let isQuitting = false
+const tunnelManager = new TunnelProcessManager()
 
 function createWindow(): void {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     title: 'Nexus-Gate-Desktop',
     width: width - 150,
     height: height - 100,
@@ -18,6 +24,8 @@ function createWindow(): void {
       sandbox: false
     }
   })
+
+  if (!mainWindow) return
 
   // Intercepter les en-têtes pour autoriser le chargement
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
@@ -50,26 +58,6 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
-
-  // Gestion des contrôles de fenêtre
-  ipcMain.handle('minimize', () => {
-    mainWindow.minimize()
-    return 'is-minimizer'
-  })
-
-  ipcMain.handle('maximize', () => {
-    if (mainWindow.isMaximized()) {
-      mainWindow.unmaximize()
-    } else {
-      mainWindow.maximize()
-    }
-    return 'is-maximizer'
-  })
-
-  ipcMain.handle('close', () => {
-    mainWindow.close()
-    return 'is-closer'
-  })
 }
 
 // This method will be called when Electron has finished
@@ -86,8 +74,41 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
+  // Relai des events du manager vers le renderer
+  tunnelManager.on('status', (serverId, status) => {
+    if (mainWindow && !mainWindow.isDestroyed() && !mainWindow.webContents.isDestroyed())
+      mainWindow.webContents.send('tunnel:status', { serverId, status })
+  })
+  tunnelManager.on('log', (serverId, line) => {
+    if (mainWindow && !mainWindow.isDestroyed() && !mainWindow.webContents.isDestroyed())
+      mainWindow.webContents.send('tunnel:log', { serverId, line })
+  })
+
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  ipcMain.on('tunnel:start', (_event, payload: SocketCreatePayload) => {
+    console.log('Tunnel Started')
+    tunnelManager.start(
+      {
+        serverId: payload.serverId,
+        token: payload.token,
+        localTarget: 'http://localhost:8080',
+        url: 'ws://localhost:9006/tunnel'
+      },
+      app.isPackaged
+    )
+    return tunnelManager.status(payload.serverId)
+  })
+
+  ipcMain.on('tunnel:stop', async (_event, serverId: string) => {
+    console.log('Tunnel Stopped')
+    await tunnelManager.stop(serverId)
+    return tunnelManager.status(serverId)
+  })
+
+  ipcMain.on('tunnel:status', (_event, serverId: string) => tunnelManager.status(serverId))
+  ipcMain.on('tunnel:logs', (_event, serverId: string) => tunnelManager.logs(serverId))
 
   createWindow()
 
@@ -96,6 +117,13 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+})
+
+app.on('before-quit', (event) => {
+  if (isQuitting) return
+  event.preventDefault()
+  isQuitting = true
+  tunnelManager.stopAll().finally(() => app.quit())
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
