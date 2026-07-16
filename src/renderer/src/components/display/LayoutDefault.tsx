@@ -17,7 +17,7 @@ export function LayoutDefault(): React.JSX.Element {
   const loaded = useRef(false)
 
   // Remplacez cette condition par votre vraie logique d'authentification (ex: token dans localStorage)
-  const { accessToken } = useStore(useAuthStore)
+  const { accessToken, user } = useStore(useAuthStore)
 
   // AU chargement de la page
   useEffect(() => {
@@ -44,6 +44,10 @@ export function LayoutDefault(): React.JSX.Element {
 
   if (!accessToken) {
     return <Navigate to={'/auth/login'} replace />
+  }
+
+  if (user?.role === 'CLIENT') {
+    return <Navigate to={'/blocked'} replace />
   }
   return (
     <div className="min-h-screen bg-background-soft-50 font-sans">

@@ -1,34 +1,32 @@
 // ─── Server card ──────────────────────────────────────────────
 
-import { timeSince, dateFormat } from "@/helpers";
-import { getServerStatus } from "@/helpers/server.helper";
-import { ServerStatusTypes, type Server, type ServerType } from "@/types/nexusgate.type";
-import { ChevronRight } from "@tailgrids/icons";
-import ServerIcon from "../icons/ServerIcon";
-import StatusBadge from "./StatusBadge";
+import { timeSince, dateFormat } from '@/helpers'
+import { getServerStatus } from '@/helpers/server.helper'
+import { ServerStatusTypes, type Server, type ServerType } from '@/types/nexusgate.type'
+import { ChevronRight } from '@tailgrids/icons'
+import ServerIcon from '../icons/ServerIcon'
+import StatusBadge from './StatusBadge'
 
-function TypeBadge({ type }: { type: ServerType }) {
+function TypeBadge({ type }: { type: ServerType }): React.JSX.Element {
   const config =
-    type === "CLOUD"
-      ? { bg: "bg-blue-50", text: "text-blue-600", label: "Cloud" }
-      : { bg: "bg-orange-50", text: "text-orange-600", label: "Local" };
+    type === 'CLOUD'
+      ? { bg: 'bg-blue-50', text: 'text-blue-600', label: 'Cloud' }
+      : { bg: 'bg-orange-50', text: 'text-orange-600', label: 'Local' }
   return (
-    <span
-      className={`text-xs font-medium px-2 py-0.5 rounded ${config.bg} ${config.text}`}
-    >
+    <span className={`text-xs font-medium px-2 py-0.5 rounded ${config.bg} ${config.text}`}>
       {config.label}
     </span>
-  );
+  )
 }
 
 export default function ServerCard({
   server,
-  onClick,
+  onClick
 }: {
-  server: Server;
-  onClick: () => void;
-}) {
-  const status = getServerStatus(server);
+  server: Server
+  onClick: () => void
+}): React.JSX.Element {
+  const status = getServerStatus(server)
 
   return (
     <button
@@ -41,10 +39,10 @@ export default function ServerCard({
           <div
             className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
               status === ServerStatusTypes.OFFLINE
-                ? "bg-gray-100 text-gray-400"
+                ? 'bg-gray-100 text-gray-400'
                 : status === ServerStatusTypes.TUNNEL
-                  ? "bg-amber-50 text-amber-500 group-hover:bg-amber-100"
-                  : "bg-indigo-50 text-indigo-400 group-hover:text-indigo-600 group-hover:bg-indigo-100"
+                  ? 'bg-amber-50 text-amber-500 group-hover:bg-amber-100'
+                  : 'bg-indigo-50 text-indigo-400 group-hover:text-indigo-600 group-hover:bg-indigo-100'
             }`}
           >
             <ServerIcon className="w-5 h-5" />
@@ -53,9 +51,7 @@ export default function ServerCard({
             <p className="text-sm font-semibold text-gray-800 truncate group-hover:text-indigo-700 transition-colors">
               {server.name}
             </p>
-            <p className="text-xs text-gray-400 font-mono truncate">
-              {server.identifier}
-            </p>
+            <p className="text-xs text-gray-400 font-mono truncate">{server.identifier}</p>
           </div>
         </div>
         <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-indigo-400 transition-colors shrink-0 mt-0.5" />
@@ -76,29 +72,25 @@ export default function ServerCard({
       <div className="flex items-center justify-between pt-1 border-t border-gray-50">
         <div className="flex items-center gap-3 text-xs text-gray-400">
           <span>
-            <span className="font-medium text-gray-600">
-              {server.rulesCount}
-            </span>{" "}
-            règle{server.rulesCount !== 1 ? "s" : ""}
+            <span className="font-medium text-gray-600">{server.rulesCount}</span> règle
+            {server.rulesCount !== 1 ? 's' : ''}
           </span>
-          {server.type === "LOCAL" && server.tunnelSession && (
+          {server.type === 'LOCAL' && server.tunnelSession && (
             <span>
-              Ping{" "}
+              Ping{' '}
               <span className="font-medium text-gray-600">
                 {timeSince(server.tunnelSession.lastPingAt)}
               </span>
             </span>
           )}
-          {server.type === "CLOUD" && server.url && (
+          {server.type === 'CLOUD' && server.url && (
             <span className="truncate max-w-35 font-mono text-gray-300">
-              {server.url.replace(/^https?:\/\//, "")}
+              {server.url.replace(/^https?:\/\//, '')}
             </span>
           )}
         </div>
-        <span className="text-xs text-gray-300">
-          {dateFormat(server.updatedAt, "DD/MM/YYYY")}
-        </span>
+        <span className="text-xs text-gray-300">{dateFormat(server.updatedAt, 'DD/MM/YYYY')}</span>
       </div>
     </button>
-  );
+  )
 }

@@ -9,7 +9,7 @@ export function WindowControls(): React.JSX.Element {
       <button
         type="button"
         aria-label="minimize"
-        onClick={() => void window.versions.minimize()}
+        onClick={() => {}}
         className="flex h-10 w-12 items-center justify-center text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
       >
         <Minus size={16} strokeWidth={2.3} />
@@ -18,7 +18,7 @@ export function WindowControls(): React.JSX.Element {
       <button
         type="button"
         aria-label="maximize"
-        onClick={() => void window.versions.maximize()}
+        onClick={() => {}}
         className="flex h-10 w-12 items-center justify-center text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
       >
         <ExpandSquare4 size={14} strokeWidth={2.3} />
@@ -27,7 +27,7 @@ export function WindowControls(): React.JSX.Element {
       <button
         type="button"
         aria-label="close"
-        onClick={() => void window.versions.close()}
+        onClick={() => {}}
         className="flex h-10 w-12 items-center justify-center text-slate-500 transition hover:bg-red-600 hover:text-white"
       >
         <Close size={18} strokeWidth={2.3} />

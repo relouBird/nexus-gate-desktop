@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router'
+import { Routes, Route, HashRouter } from 'react-router'
 
 // Load les styles globaux
 import './assets/App.css'
@@ -28,6 +28,7 @@ import ForgotPasswordPage from './routes/auth/ForgotPasswordPage'
 import DetailsServerPage from './routes/network/DetailsServerPage'
 import TeamSettingsPage from './routes/team/TeamSettings'
 import LogsPage from './routes/network/LogsPage'
+import BlockedPage from './routes/BlockedPage'
 
 function App(): React.JSX.Element {
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
@@ -51,8 +52,9 @@ function App(): React.JSX.Element {
 
   return (
     <>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
+          <Route path="blocked" element={<BlockedPage />} />
           <Route element={<LayoutDefault />}>
             <Route index element={<DashboardPage />} />
             <Route path="network">
@@ -93,7 +95,7 @@ function App(): React.JSX.Element {
             </div>
           )}
         </div>
-      </BrowserRouter>
+      </HashRouter>
     </>
   )
 }
